@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('antrian_polis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
+            $table->string('kd_antrian');
+            $table->foreignId('pasien_id')->nullable();
             $table->foreignId('petugas_id')->nullable();
             $table->foreignId('dokter_id')->constrained()->onDelete('cascade');
             $table->foreignId('poli_id')->constrained()->onDelete('cascade');
@@ -22,9 +23,10 @@ return new class extends Migration
             $table->string('nama_pasien');
             $table->string('jenis_kelamin');
             $table->date('tanggal_lahir');
-            $table->string('umur');
+
             $table->string('alamat');
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
+            $table->date('tanggal_kunjungan');
             $table->string('status')->default('pending'); //pending, proses, cancel, selesai;
             $table->timestamps();
         });

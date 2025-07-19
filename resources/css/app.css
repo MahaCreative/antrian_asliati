@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.swal2-container {
+  z-index: 9999 !important;
+  
+}
+.useTransition{
+    @apply transition-all duration-500 ease-in-out;
+}
