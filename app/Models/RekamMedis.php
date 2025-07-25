@@ -15,6 +15,11 @@ class RekamMedis extends Model
         return $this->belongsTo(Dokter::class);
     }
 
+    public function pasien()
+    {
+        return $this->belongsTo(Pasien::class);
+    }
+
     protected $casts = [
         'obat' => 'array',
         'hasil_penunjang' => 'array',

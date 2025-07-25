@@ -172,10 +172,16 @@ export default function AuthLayouts({ title, children }) {
                         Laporan
                     </p>
                     <MenuLink
-                        links={route("admin.kelola-poli")}
+                        links={route("admin.report.antrian-poli.index")}
                         logo={<Print color="inherit" fontSize="inherit" />}
-                        active={"admin.kelola-poli"}
-                        name={"Laporan Antrian Klinik"}
+                        active={"admin.report.antrian-poli.index"}
+                        name={"Laporan Antrian Poli"}
+                    />
+                    <MenuLink
+                        links={route("admin.report.rekam-medis.index")}
+                        logo={<Print color="inherit" fontSize="inherit" />}
+                        active={"admin.report.rekam-medis.index"}
+                        name={"Laporan Rekam Medis"}
                     />
                 </div>
                 <button
