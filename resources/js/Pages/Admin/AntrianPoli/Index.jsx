@@ -2,19 +2,53 @@ import InputText from "@/Components/InputText";
 import SelectOptions from "@/Components/SelectOptions";
 import AuthLayouts from "@/Layouts/AuthLayouts";
 import { Link, router, usePage } from "@inertiajs/react";
+import axios from "axios";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Index(props) {
     const antrianPoli = props.antrianPoli;
     const [params, setParams] = useState({ poli: "", date: "" });
     const { poli } = usePage().props;
-    const updateHandler = (id, value) => {
-        router.post(route("admin.panggil-antrian-poli"), {
-            antrian_id: id,
-            status: value,
-        });
+
+    const updateHandler = async (id, value) => {
+        try {
+            await axios.post(route("admin.panggil-antrian-poli"), {
+                antrian_id: id,
+                status: value,
+            });
+            // opsional: bisa reload atau setState manual kalau mau langsung kelihatan
+        } catch (error) {
+            console.error(error);
+        }
     };
+    useEffect(() => {
+        Echo.channel("pengambilan-antrian").listen(
+            "PengambilanAntrianEvent",
+            (data) => {
+                router.reload({ preserveScroll: true });
+            }
+        );
+        Echo.channel("RekamMedisStore").listen(
+            "RekamMedisStoreEvents",
+            (data) => {
+                console.log("Rekam medis event diterima:", data);
+                router.reload({ preserveScroll: true });
+            }
+        );
+
+        Echo.channel("antrianPoli").listen("AntrianPoliEvents", (data) => {
+            router.reload({ preserveScroll: true });
+        });
+
+        return () => {
+            if (Echo) {
+                Echo.leaveChannel("antrianPoli");
+                Echo.leaveChannel("pengambilan-antrian");
+                Echo.leaveChannel("RekamMedisStore");
+            }
+        };
+    }, []);
     return (
         <div className="bg-white py-4 drop-shadow-sm px-4 mx-8 my-4 rounded-md">
             <table className="table w-full">

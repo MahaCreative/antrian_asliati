@@ -91,22 +91,8 @@ class AntrianPoliReportController extends Controller
 
         $total = $data->count();
 
-        // Map data to include poli name, dokter name, and created_at date
-        $mappedData = $data->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'kd_antrian' => $item->kd_antrian,
-                'nama_pasien' => $item->nama_pasien,
-                'tanggal_kunjungan' => $item->tanggal_kunjungan,
-                'status' => $item->status,
-                'nama_poli' => $item->poli ? $item->poli->nama_poli : null,
-                'nama_dokter' => $item->dokter && $item->dokter->user ? $item->dokter->user->name : null,
-                'created_at' => $item->created_at->format('Y-m-d'),
-            ];
-        });
-
         return response()->json([
-            'data' => $mappedData,
+            'data' => $data,
             'total' => $total,
             'report_type' => $reportType,
         ]);
@@ -140,5 +126,13 @@ class AntrianPoliReportController extends Controller
                 ];
             });
         return response()->json($dokters);
+    }
+
+    /**
+     * Show the print page for Antrian Poli report.
+     */
+    public function print()
+    {
+        return inertia('Admin/Report/AntrianPoliPrintPage');
     }
 }

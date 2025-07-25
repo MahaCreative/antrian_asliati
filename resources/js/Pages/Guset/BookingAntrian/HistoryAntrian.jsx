@@ -41,7 +41,13 @@ export default function HistoryAntrian(props) {
             // reload data jika diperlukan
             router.reload({ preserveScroll: true });
         });
-    }, [antrianPoli]); // pastikan listen hanya sekali, dan antrianPoli di-deps jika daftar berubah
+
+        return () => {
+            if (Echo) {
+                Echo.leaveChannel("antrianPoli");
+            }
+        };
+    }, []); // pastikan listen hanya sekali, dan antrianPoli di-deps jika daftar berubah
 
     return (
         <div className="px-4 md:px-8 lg:px-16 py-6 bg-gray-50 min-h-screen">

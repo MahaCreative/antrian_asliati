@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\CreateAntrianOffline;
+use App\Events\PemanggilanAntrianEvent;
 use App\Models\Antrian;
 use Illuminate\Http\Request;
 
@@ -23,7 +23,7 @@ class AntrianOfflineController extends Controller
             'kd_antrian' => 'A-' . $countAntrian + 1,
             'poli_id' => $request->poli_id,
         ]);
-        broadcast(new CreateAntrianOffline($antrian))->toOthers();
+        broadcast(new PemanggilanAntrianEvent($antrian))->toOthers();
         return response()->json(['antrian' => $antrian]);
     }
 }

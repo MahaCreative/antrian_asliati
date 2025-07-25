@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import InputText from "@/Components/InputText";
 import SelectOptions from "@/Components/SelectOptions";
+import { router } from "@inertiajs/react";
 
 export default function RekamMedisReportPage() {
     const [reportType, setReportType] = useState("daily");
@@ -58,7 +59,26 @@ export default function RekamMedisReportPage() {
     };
 
     const printReport = () => {
-        window.print();
+        // Navigate to print page with query params using Inertia
+        const queryParams = new URLSearchParams();
+        queryParams.append("report_type", reportType);
+        if (reportType === "daily") {
+            queryParams.append("date_from", dateFrom);
+            queryParams.append("date_to", dateTo);
+        } else if (reportType === "monthly") {
+            queryParams.append("month_from", monthFrom);
+            queryParams.append("month_to", monthTo);
+            queryParams.append("year", year);
+        } else if (reportType === "yearly") {
+            queryParams.append("year", year);
+        }
+        if (dokterId) {
+            queryParams.append("dokter_id", dokterId);
+        }
+        router.visit(
+            route("admin.report.rekam-medis.print") +
+                `?${queryParams.toString()}`
+        );
     };
 
     return (

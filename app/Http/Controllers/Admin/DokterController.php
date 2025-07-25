@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\GlobalEvents;
+use App\Events\DokterEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Dokter;
 use App\Models\Poli;
@@ -55,7 +55,7 @@ class DokterController extends Controller
                 'no_hp' => $attr['no_hp'],
                 'avatar' => $attr['avatar'],
             ]);
-            broadcast(new GlobalEvents($dokter))->toOthers();
+            broadcast(new DokterEvent($dokter))->toOthers();
             DB::commit();
         } catch (\Exception $e) {
             dd($e);
@@ -98,13 +98,13 @@ class DokterController extends Controller
             'email' => $request->email,
             'password' => $password
         ]);
-        broadcast(new GlobalEvents($dokter))->toOthers();
+        broadcast(new DokterEvent($dokter))->toOthers();
     }
 
     public function delete(Request $request, $id)
     {
         $dokter = Dokter::find($id);
         $dokter->delete();
-        broadcast(new GlobalEvents(null))->toOthers();
+        broadcast(new DokterEvent(null))->toOthers();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RekamMedisStoreEvents;
 use App\Models\AntrianPoli;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
@@ -77,6 +78,8 @@ class RekamMedisController extends Controller
             'obat'            => $obat,
             'hasil_penunjang' => $hasilPenunjang,
         ]);
+
+        broadcast(new RekamMedisStoreEvents(null));
 
         return back()->with('success', 'Rekam medis berhasil disimpan.');
     }

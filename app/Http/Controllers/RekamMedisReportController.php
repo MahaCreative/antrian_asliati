@@ -94,4 +94,12 @@ class RekamMedisReportController extends Controller
 
         return response()->json($doctors);
     }
+
+    /**
+     * Show the print page for Rekam Medis report.
+     */
+    public function print()
+    {
+        return inertia('Admin/Report/RekamMedisPrintPage');
+    }
 }

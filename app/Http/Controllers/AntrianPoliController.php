@@ -16,7 +16,7 @@ class AntrianPoliController extends Controller
 
 
         $dokter = Dokter::where('user_id', $request->user()->id)->first();
-
+        $tanggal = now();
         $antrianPoli = AntrianPoli::with('poli', 'dokter', 'pasien')
             ->where('dokter_id', $dokter->id)
             ->where('status', '!=', 'selesai')
@@ -24,5 +24,17 @@ class AntrianPoliController extends Controller
             ->get();
 
         return inertia('Admin/AntrianPoli/Index', compact('antrianPoli'));
+    }
+
+    public function update(Request $request)
+    {
+
+        $antrian = AntrianPoli::findOrFail($request->antrian_id);
+        $antrian->status = $request->status;
+        $antrian->save();
+
+        broadcast(new AntrianPoliEvents($antrian));
+
+        return response()->json(['message' => 'Status updated successfully']);
     }
 }

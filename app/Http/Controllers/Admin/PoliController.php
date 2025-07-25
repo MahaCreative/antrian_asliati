@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\GlobalEvents;
+use App\Events\KlinikPoliEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Poli;
 use Illuminate\Http\Request;
@@ -41,7 +41,7 @@ class PoliController extends Controller
 
         $poli = Poli::create($attr);
 
-        broadcast(new GlobalEvents($poli))->toOthers();
+        broadcast(new \App\Events\KlinikPoliEvent($poli))->toOthers();
     }
 
     public function update(Request $request)
@@ -53,7 +53,7 @@ class PoliController extends Controller
         ]);
         $poli = Poli::find($request->id);
         $poli->update($attr);
-        broadcast(new GlobalEvents($poli))->toOthers();
+        broadcast(new \App\Events\KlinikPoliEvent($poli))->toOthers();
     }
 
     public function delete(Request $request, $id)
@@ -71,6 +71,6 @@ class PoliController extends Controller
         }
 
         return back()->with('success', 'Poli berhasil dihapus dan kode diperbarui.');
-        broadcast(new GlobalEvents(null))->toOthers();
+        broadcast(new KlinikPoliEvent(null))->toOthers();
     }
 }

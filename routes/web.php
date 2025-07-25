@@ -100,10 +100,13 @@ Route::middleware(['auth',])->group(function () {
     // Report routes
     Route::get('/admin/report/antrian-poli', [\App\Http\Controllers\AntrianPoliReportController::class, 'index'])->name('admin.report.antrian-poli.index');
     Route::post('/admin/report/antrian-poli/generate', [\App\Http\Controllers\AntrianPoliReportController::class, 'generate'])->name('admin.report.antrian-poli.generate');
+    Route::get('/admin/report/antrian-poli/print', [\App\Http\Controllers\AntrianPoliReportController::class, 'print'])->name('admin.report.antrian-poli.print');
 
     Route::get('/admin/report/rekam-medis', [\App\Http\Controllers\RekamMedisReportController::class, 'index'])->name('admin.report.rekam-medis.index');
     Route::post('/admin/report/rekam-medis/generate', [\App\Http\Controllers\RekamMedisReportController::class, 'generate'])->name('admin.report.rekam-medis.generate');
     Route::get('/admin/report/rekam-medis/get-doctors', [\App\Http\Controllers\RekamMedisReportController::class, 'getDoctors'])->name('admin.report.rekam-medis.getDoctors');
+    Route::get('/admin/report/rekam-medis/print', [\App\Http\Controllers\RekamMedisReportController::class, 'print'])->name('admin.report.rekam-medis.print');
+
     Route::get('/admin/report/antrian-poli/get-polis', [\App\Http\Controllers\AntrianPoliReportController::class, 'getPolis'])->name('admin.report.antrian-poli.getPolis');
     Route::get('/admin/report/antrian-poli/get-dokters-by-poli', [\App\Http\Controllers\AntrianPoliReportController::class, 'getDoktersByPoli'])->name('admin.report.antrian-poli.getDoktersByPoli');
 });

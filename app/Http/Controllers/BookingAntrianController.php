@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\GlobalEvents;
+use App\Events\PengambilanAntrianEvent;
 use App\Models\Antrian;
 use App\Models\AntrianPoli;
 use App\Models\Dokter;
@@ -104,7 +104,7 @@ class BookingAntrianController extends Controller
             'status' => 'pending', // pastikan ada default status
         ]);
 
-        broadcast(new GlobalEvents(null))->toOthers();
+        broadcast(new PengambilanAntrianEvent($booking))->toOthers();
 
         return response()->json([
             'message' => 'Antrian berhasil dibuat!',

@@ -14,7 +14,7 @@ import {
     VerifiedUser,
     ViewComfyAltOutlined,
 } from "@mui/icons-material";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 export default function GuestLayouts({ children, title }) {
     const { poli, dokter, profile_klinik, auth } = usePage().props;
@@ -27,9 +27,42 @@ export default function GuestLayouts({ children, title }) {
     const scrollToSection = (ref) => {
         ref.current?.scrollIntoView({ behavior: "smooth" });
     };
-    Echo.channel("global").listen("GlobalEvents", (data) => {
-        router.reload({ preserveScroll: true });
-    });
+
+    useEffect(() => {
+        // Listen to DokterEvent
+        Echo.channel("dokter").listen("DokterEvent", (data) => {
+            router.reload({ preserveScroll: true });
+        });
+
+        // Listen to KlinikPoliEvent
+        Echo.channel("klinik-poli").listen("KlinikPoliEvent", (data) => {
+            router.reload({ preserveScroll: true });
+        });
+
+        // Listen to PemanggilanAntrianEvent
+        Echo.channel("pemanggilan-antrian").listen(
+            "PemanggilanAntrianEvent",
+            (data) => {
+                router.reload({ preserveScroll: true });
+            }
+        );
+
+        // Listen to PengambilanAntrianEvent
+        Echo.channel("pengambilan-antrian").listen(
+            "PengambilanAntrianEvent",
+            (data) => {
+                router.reload({ preserveScroll: true });
+            }
+        );
+
+        // Cleanup on unmount
+        return () => {
+            Echo.leaveChannel("dokter");
+            Echo.leaveChannel("klinik-poli");
+            Echo.leaveChannel("pemanggilan-antrian");
+            Echo.leaveChannel("pengambilan-antrian");
+        };
+    }, []);
 
     return (
         <>
