@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\AntrianPoli;
 use App\Models\BackgroundAntrian;
 use App\Models\Dokter;
 use App\Models\JadwalDokter;
@@ -36,6 +37,12 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+
+        $antrian = AntrianPoli::where('status', '=', 'pending')->whereDate('tanggal_kunjungan', '<=', now())->latest()->get();
+        foreach ($antrian as $item) {
+            $item->update(['status' => 'cancell']);
+        }
+
         return [
             ...parent::share($request),
             'profile_klinik' => ProfileKlinik::first(),

@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string('nama');
             $table->string('jenis_kelamin');
             $table->date('tanggal_lahir');
-
             $table->string('alamat');
             $table->string('phone_number')->nullable();
             $table->string('status')->default('pribadi');
+            $table->string('avatar')->default('default_profile.jpeg');
             $table->timestamps();
         });
     }

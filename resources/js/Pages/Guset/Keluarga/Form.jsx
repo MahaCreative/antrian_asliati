@@ -13,6 +13,7 @@ export default function Form({ closeHandler, model }) {
         bpjs: "",
         jenis_kelamin: "",
         tanggal_lahir: "",
+        avatar: "",
         status: "",
         alamat: "",
     });
@@ -173,6 +174,21 @@ export default function Form({ closeHandler, model }) {
                             />
                         </div>
                     </div>
+                    <InputText
+                        label={"avatar"}
+                        type="file"
+                        name="name"
+                        errors={errors.avatar}
+                        onChange={(e) =>
+                            setData({ ...data, avatar: e.target.files[0] })
+                        }
+                        className={"w-full"}
+                    />
+                    {model && (
+                        <p className="font-bold">
+                            *Biarkan kosong jika tidak ingin mengganti foto
+                        </p>
+                    )}
                     <TextArea
                         label={"alamat"}
                         name="alamat"

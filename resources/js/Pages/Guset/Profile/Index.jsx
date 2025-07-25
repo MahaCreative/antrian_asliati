@@ -8,6 +8,7 @@ import React, { useEffect, useRef } from "react";
 export default function Index(props) {
     const profileRef = useRef(null);
     const user = props.user;
+    const pasien = props.pasien;
     const { data, setData, post, reset, errors } = useForm({
         id: user.id,
         email: user.email,
@@ -15,11 +16,11 @@ export default function Index(props) {
         name: user.name,
         phone_number: user.phone_number,
         avatar: user.avatar,
-        nik: user.pasien.nik,
-        bpjs: user.pasien.bpjs,
-        jenis_kelamin: user.pasien.jenis_kelamin,
-        tanggal_lahir: user.pasien.tanggal_lahir,
-        alamat: user.pasien.alamat,
+        nik: pasien.nik,
+        bpjs: pasien.bpjs,
+        jenis_kelamin: pasien.jenis_kelamin,
+        tanggal_lahir: pasien.tanggal_lahir,
+        alamat: pasien.alamat,
     });
     useEffect(() => {
         profileRef.current?.scrollIntoView({ behavior: "smooth" });

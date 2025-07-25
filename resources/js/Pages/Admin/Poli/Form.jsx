@@ -7,7 +7,6 @@ import React, { useEffect } from "react";
 export default function Form({ closeHandler, model }) {
     const { showResponse } = ResponseAlert();
     const { data, setData, post, reset, errors } = useForm({
-        kd_poli: "",
         nama_poli: "",
         keterangan: "",
     });
@@ -53,13 +52,6 @@ export default function Form({ closeHandler, model }) {
     };
     return (
         <form onSubmit={model ? updateHandler : submitHandler}>
-            <InputText
-                className={"w-full"}
-                label="Kode Poli"
-                value={data.kd_poli}
-                errors={errors.kd_poli}
-                onChange={(e) => setData({ ...data, kd_poli: e.target.value })}
-            />
             <InputText
                 className={"w-full"}
                 label="Nama Poli"

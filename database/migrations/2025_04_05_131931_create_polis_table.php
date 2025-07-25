@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('polis', function (Blueprint $table) {
             $table->id();
             $table->string('kd_poli');
+            $table->string('kd_antrian');
             $table->string('nama_poli');
             $table->longText('keterangan');
+
             $table->timestamps();
         });
     }

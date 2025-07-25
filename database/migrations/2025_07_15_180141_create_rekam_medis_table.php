@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('rekam_medis', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('pasien_id')->constrained('pasiens')->onDelete('cascade');
+            $table->foreignId('dokter_id')->constrained('dokters')->onDelete('cascade');
+            $table->date('tanggal'); // tanggal pemeriksaan
+            $table->text('keluhan')->nullable(); // S
+            $table->text('pemeriksaan')->nullable(); // O
+            $table->text('diagnosa')->nullable(); // A
+            $table->text('rencana')->nullable(); // P
+            $table->text('tindakan')->nullable(); // tindakan medis
+            $table->json('obat')->nullable(); // simpan array nama obat
+            $table->json('hasil_penunjang')->nullable(); // simpan hasil lab/radiologi (bisa berupa path file atau json)
             $table->timestamps();
         });
     }

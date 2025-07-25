@@ -16,6 +16,7 @@ use App\Http\Controllers\BookingAntrianController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KeluargaController;
+use App\Http\Controllers\RekamMedisController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -44,6 +45,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('profile', [AuthController::class, 'profile'])->name('profile');
     Route::post('profile', [AuthController::class, 'profile_update'])->name('profile');
     Route::get('booking-antrian', [BookingAntrianController::class, 'index'])->name('booking-antrian');
+    Route::post('/cek-jumlah-antrian', [BookingAntrianController::class, 'getJumlahAntrian'])
+        ->name('cek-jumlah-antrian');
+    Route::get('history-antrian', [BookingAntrianController::class, 'history'])->name('history-antrian');
     Route::post('store-booking-antrain', [BookingAntrianController::class, 'store'])->name('store-booking-antrian');
     Route::get('kelola-data-keluarga', [KeluargaController::class, 'index'])->name('data-keluarga');
     Route::post('post-data-keluarga', [KeluargaController::class, 'store'])->name('store-data-keluarga');
@@ -83,3 +87,13 @@ Route::get('admin/kelola-antrian-poli', [AntrianPoliController::class, 'index'])
 Route::post('admin/panggil-antrian-poli', [AntrianPoliController::class, 'update'])->name('admin.panggil-antrian-poli');
 
 Route::get('admin/data-pasien', [PasienController::class, 'index'])->name('admin.kelola-pasien');
+
+
+
+// dokter
+Route::middleware(['auth',])->group(function () {
+    Route::get('/proses-antrian/{pasien}/{id_antrian}', [RekamMedisController::class, 'index'])->name('proses-antrian.index');
+    Route::post('/store-proses-antrian/{pasien}', [RekamMedisController::class, 'store'])->name('proses-antrian.store');
+    Route::put('/rekam-medis/{rekamMedis}', [RekamMedisController::class, 'update'])->name('rekam-medis.update');
+    Route::delete('/rekam-medis/{rekamMedis}', [RekamMedisController::class, 'destroy'])->name('rekam-medis.destroy');
+});

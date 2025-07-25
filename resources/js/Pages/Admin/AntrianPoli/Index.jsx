@@ -1,7 +1,7 @@
 import InputText from "@/Components/InputText";
 import SelectOptions from "@/Components/SelectOptions";
 import AuthLayouts from "@/Layouts/AuthLayouts";
-import { router, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import moment from "moment";
 import React, { useState } from "react";
 
@@ -17,23 +17,6 @@ export default function Index(props) {
     };
     return (
         <div className="bg-white py-4 drop-shadow-sm px-4 mx-8 my-4 rounded-md">
-            <div className="flex justify-between items-center py-6">
-                <div className="w-1/6">
-                    <SelectOptions
-                        onChange={(e) =>
-                            setParams({ ...params, poli: e.target.value })
-                        }
-                    >
-                        <option value={""}>Pilih poli terlebih dahulu</option>
-                        {poli.map((item, key) => (
-                            <option key={key} value={item.id}>
-                                {item.nama_poli}
-                            </option>
-                        ))}
-                    </SelectOptions>
-                </div>
-                <InputText className={"w-[200px]"} placeholder="Cari..." />
-            </div>
             <table className="table w-full">
                 <thead>
                     <tr className="border-b border-blue-500/50">
@@ -73,84 +56,84 @@ export default function Index(props) {
                     {antrianPoli.length > 0 ? (
                         antrianPoli.map((item, key) => (
                             <>
-                                {item.poli_id == params.poli && (
-                                    <tr
-                                        key={key}
-                                        className={`${
-                                            item.status == "called"
-                                                ? "bg-red-100"
-                                                : item.status == "selesai" &&
-                                                  "bg-green-100"
-                                        } border-b border-blue-600/50`}
-                                    >
-                                        <td className={`text-center w-[10px]`}>
-                                            {key + 1}
-                                        </td>
+                                <tr
+                                    key={key}
+                                    className={`${
+                                        item.status == "called"
+                                            ? "bg-red-100"
+                                            : item.status == "selesai" &&
+                                              "bg-green-100"
+                                    } border-b border-blue-600/50`}
+                                >
+                                    <td className={`text-center w-[10px]`}>
+                                        {key + 1}
+                                    </td>
 
-                                        <td className="capitalize text-center w-[160px]">
-                                            {item.kd_antrian}
-                                        </td>
+                                    <td className="capitalize text-center w-[160px]">
+                                        {item.kd_antrian}
+                                    </td>
 
-                                        <td className="capitalize text-center w-[160px]">
-                                            {item.nama_pasien}
-                                        </td>
-                                        <td className="capitalize text-center w-[160px]">
-                                            {item.tanggal_lahir}
-                                        </td>
-                                        <td className="capitalize text-center w-[160px]">
-                                            {moment().diff(
-                                                moment(
-                                                    item.tanggal_lahir,
-                                                    "YYYY-MM-DD"
-                                                ),
-                                                "years"
-                                            ) + " Tahun"}
-                                        </td>
+                                    <td className="capitalize text-center w-[160px]">
+                                        {item.nama_pasien}
+                                    </td>
+                                    <td className="capitalize text-center w-[160px]">
+                                        {item.tanggal_lahir}
+                                    </td>
+                                    <td className="capitalize text-center w-[160px]">
+                                        {moment().diff(
+                                            moment(
+                                                item.tanggal_lahir,
+                                                "YYYY-MM-DD"
+                                            ),
+                                            "years"
+                                        ) + " Tahun"}
+                                    </td>
 
-                                        <td className="capitalize text-center w-[160px]">
-                                            {item.poli.nama_poli}
-                                        </td>
-                                        <td className="capitalize text-center w-[160px]">
-                                            {item.dokter.nama_lengkap}
-                                        </td>
+                                    <td className="capitalize text-center w-[160px]">
+                                        {item.poli.nama_poli}
+                                    </td>
+                                    <td className="capitalize text-center w-[160px]">
+                                        {item.dokter.nama_lengkap}
+                                    </td>
 
-                                        <td className="capitalize w-[179px] text-center">
-                                            {item.status}
-                                        </td>
+                                    <td className="capitalize w-[179px] text-center">
+                                        {item.status}
+                                    </td>
 
-                                        <td className="flex justify-center items-center">
-                                            {item.status != "selesai" && (
-                                                <>
-                                                    <button
-                                                        onClick={() =>
-                                                            updateHandler(
+                                    <td className="flex justify-center items-center">
+                                        {item.status != "selesai" && (
+                                            <>
+                                                <button
+                                                    onClick={() =>
+                                                        updateHandler(
+                                                            item.id,
+                                                            "called"
+                                                        )
+                                                    }
+                                                    className="py-1.5 px-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 useTransition"
+                                                >
+                                                    Panggil
+                                                </button>
+
+                                                {item.status == "called" && (
+                                                    <a
+                                                        href={route(
+                                                            "proses-antrian.index",
+                                                            [
+                                                                item.pasien_id,
                                                                 item.id,
-                                                                "called"
-                                                            )
-                                                        }
-                                                        className="py-1.5 px-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 useTransition"
+                                                            ]
+                                                        )}
+                                                        target="_blank"
+                                                        className="py-1.5 px-2 rounded-md text-white bg-green-500 hover:bg-green-600 useTransition"
                                                     >
-                                                        Panggil
-                                                    </button>
-
-                                                    {item.status ==
-                                                        "called" && (
-                                                        <button
-                                                            onClick={() =>
-                                                                prosesHandler(
-                                                                    item
-                                                                )
-                                                            }
-                                                            className="py-1.5 px-2 rounded-md text-white bg-green-500 hover:bg-green-600 useTransition"
-                                                        >
-                                                            Proses
-                                                        </button>
-                                                    )}
-                                                </>
-                                            )}
-                                        </td>
-                                    </tr>
-                                )}
+                                                        Proses
+                                                    </a>
+                                                )}
+                                            </>
+                                        )}
+                                    </td>
+                                </tr>
                             </>
                         ))
                     ) : (

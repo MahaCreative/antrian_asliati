@@ -160,28 +160,12 @@ export default function AuthLayouts({ title, children }) {
                         </DropdownLink>
                     )}
                     {auth.user.role == "dokter" && (
-                        <DropdownLink
+                        <MenuLink
+                            links={route("admin.kelola-pasien")}
                             logo={<Group color="inherit" fontSize="inherit" />}
-                            name={"Pasien"}
-                        >
-                            <DropdownLink.Item
-                                links={route("admin.kelola-petugas")}
-                                logo={
-                                    <Group color="inherit" fontSize="inherit" />
-                                }
-                                active={"admin.kelola-petugas"}
-                                name={"Data Pasien"}
-                            />
-
-                            <DropdownLink.Item
-                                links={route("admin.kelola-pasien")}
-                                logo={
-                                    <Face color="inherit" fontSize="inherit" />
-                                }
-                                active={"admin.kelola-pasien"}
-                                name={"Riwayat Pemeriksaan"}
-                            />
-                        </DropdownLink>
+                            active={"admin.kelola-pasien"}
+                            name={"Data Pasien"}
+                        />
                     )}
                     <p className="font-light text-white mx-4 my-3 text-sm border-b  border-white/50">
                         {" "}

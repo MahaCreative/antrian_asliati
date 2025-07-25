@@ -4,85 +4,172 @@ import {
     Face3,
     LocalHospital,
     MedicalInformation,
-    Timelapse,
     Timeline,
 } from "@mui/icons-material";
-import React from "react";
+import React, { useState } from "react";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    PointElement,
+    LineElement,
+    ArcElement,
+    Title,
+    Tooltip,
+    Legend,
+} from "chart.js";
+import { Bar, Line, Pie } from "react-chartjs-2";
+
+// ✅ daftar elemen chart
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    PointElement,
+    LineElement,
+    ArcElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 export default function Index(props) {
-    const countPoli = props.countPoli;
-    const countDokter = props.countDokter;
-    const countPasien = props.countPasien;
+    const {
+        countDokter,
+        countPoli,
+        countPasien,
+        countAntrianPoli,
+        chartLabels,
+        chartYearlyDatasets,
+        dailyLabels,
+        dailyData,
+    } = props;
 
-    const countAntrianPoli = props.countAntrianPoli;
-    console.log(countPoli);
+    // tipe chart tahunan
+    const [yearlyType, setYearlyType] = useState("line");
+    // tipe chart harian
+    const [dailyType, setDailyType] = useState("bar");
+
+    const yearlyData = { labels: chartLabels, datasets: chartYearlyDatasets };
+    const dailyDataSet = {
+        labels: dailyLabels,
+        datasets: [
+            {
+                label: "Antrian Hari Ini",
+                data: dailyData,
+                backgroundColor: "#3b82f6",
+                borderColor: "#1e40af",
+                borderWidth: 1,
+            },
+        ],
+    };
+
+    const chartOptions = {
+        responsive: true,
+        plugins: { legend: { position: "top" }, title: { display: false } },
+    };
+
+    const cardClass =
+        "rounded-xl p-6 shadow-md text-white flex flex-col justify-between";
 
     return (
-        <div className="px-4 md:px-8 ">
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-2">
-                <div className=" rounded-md  bg-gradient-to-br from-blue-500  to-blue-600 flex justify-between flex-col items-center">
-                    <div className="px-5 flex flex-row items-center justify-between w-full py-6">
-                        <p className="text-6xl text-white leading-3">
-                            <MedicalInformation
-                                color="inherit"
-                                fontSize="inherit"
-                            />
-                        </p>
-                        <div className="text-right">
-                            <p className="tracking-tighter text-white text-5xl font-bold">
-                                {countDokter}
-                            </p>
-                        </div>
+        <div className="px-4 md:px-8 py-6 space-y-8">
+            {/* Statistik Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div
+                    className={`${cardClass} bg-gradient-to-br from-blue-500 to-blue-600`}
+                >
+                    <div className="flex justify-between items-center">
+                        <MedicalInformation fontSize="large" />
+                        <p className="text-4xl font-bold">{countDokter}</p>
                     </div>
-                    <p className="w-full text-center tracking-tight text-white text-sm font-semibold py-4 border-white border-t">
-                        Jumlah Layanan Dokter
-                    </p>
-                </div>
-                <div className=" rounded-md  bg-gradient-to-br from-pink-500  to-pink-600 flex justify-between flex-col items-center">
-                    <div className="px-5 flex flex-row items-center justify-between w-full py-6">
-                        <p className="text-6xl text-white leading-3">
-                            <LocalHospital color="inherit" fontSize="inherit" />
-                        </p>
-                        <div className="text-right">
-                            <p className="tracking-tighter text-white text-5xl font-bold">
-                                {countPoli}
-                            </p>
-                        </div>
-                    </div>
-                    <p className="w-full text-center tracking-tight text-white text-sm font-semibold py-4 border-white border-t">
-                        Jumlah Layanan Klinik
-                    </p>
-                </div>
-                <div className=" rounded-md  bg-gradient-to-br from-green-500  to-green-600 flex justify-between flex-col items-center">
-                    <div className="px-5 flex flex-row items-center justify-between w-full py-6">
-                        <p className="text-6xl text-white leading-3">
-                            <Face3 color="inherit" fontSize="inherit" />
-                        </p>
-                        <div className="text-right">
-                            <p className="tracking-tighter text-white text-5xl font-bold">
-                                {countPasien}
-                            </p>
-                        </div>
-                    </div>
-                    <p className="w-full text-center tracking-tight text-white text-sm font-semibold py-4 border-white border-t">
-                        Jumlah Pasien Terdaftar
-                    </p>
+                    <p className="mt-4 text-sm font-medium">Total Dokter</p>
                 </div>
 
-                <div className=" rounded-md  bg-gradient-to-br from-amber-500  to-amber-600 flex justify-between flex-col items-center">
-                    <div className="px-5 flex flex-row items-center justify-between w-full py-6">
-                        <p className="text-6xl text-white leading-3">
-                            <Timeline color="inherit" fontSize="inherit" />
-                        </p>
-                        <div className="text-right">
-                            <p className="tracking-tighter text-white text-5xl font-bold">
-                                {countAntrianPoli}
-                            </p>
-                        </div>
+                <div
+                    className={`${cardClass} bg-gradient-to-br from-pink-500 to-pink-600`}
+                >
+                    <div className="flex justify-between items-center">
+                        <LocalHospital fontSize="large" />
+                        <p className="text-4xl font-bold">{countPoli}</p>
                     </div>
-                    <p className="w-full text-center tracking-tight text-white text-sm font-semibold py-4 border-white border-t">
-                        Jumlah Antrian Poli Saat Ini
-                    </p>
+                    <p className="mt-4 text-sm font-medium">Total Poli</p>
+                </div>
+
+                <div
+                    className={`${cardClass} bg-gradient-to-br from-green-500 to-green-600`}
+                >
+                    <div className="flex justify-between items-center">
+                        <Face3 fontSize="large" />
+                        <p className="text-4xl font-bold">{countPasien}</p>
+                    </div>
+                    <p className="mt-4 text-sm font-medium">Total Pasien</p>
+                </div>
+
+                <div
+                    className={`${cardClass} bg-gradient-to-br from-amber-500 to-amber-600`}
+                >
+                    <div className="flex justify-between items-center">
+                        <Timeline fontSize="large" />
+                        <p className="text-4xl font-bold">{countAntrianPoli}</p>
+                    </div>
+                    <p className="mt-4 text-sm font-medium">Antrian Hari Ini</p>
+                </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row gap-2 justify-between items-center w-full">
+                {/* Grafik Harian */}
+                <div className="bg-white p-6 rounded-xl shadow-md space-y-4 w-full">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-lg font-semibold">
+                            Grafik Antrian Hari Ini (Per Poli)
+                        </h2>
+                        <select
+                            className="border rounded-md px-3 py-2"
+                            value={dailyType}
+                            onChange={(e) => setDailyType(e.target.value)}
+                        >
+                            <option value="bar">Bar Chart</option>
+                            <option value="line">Line Chart</option>
+                            <option value="pie">Pie Chart</option>
+                        </select>
+                    </div>
+                    {dailyType === "bar" && (
+                        <Bar data={dailyDataSet} options={chartOptions} />
+                    )}
+                    {dailyType === "line" && (
+                        <Line data={dailyDataSet} options={chartOptions} />
+                    )}
+                    {dailyType === "pie" && (
+                        <Pie data={dailyDataSet} options={chartOptions} />
+                    )}
+                </div>
+                {/* Grafik Tahunan */}
+                <div className="bg-white p-6 rounded-xl shadow-md space-y-4 w-full">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-lg font-semibold">
+                            Grafik Antrian Tahunan (Per Poli)
+                        </h2>
+                        <select
+                            className="border rounded-md px-3 py-2"
+                            value={yearlyType}
+                            onChange={(e) => setYearlyType(e.target.value)}
+                        >
+                            <option value="line">Line Chart</option>
+                            <option value="bar">Bar Chart</option>
+                            <option value="pie">Pie Chart</option>
+                        </select>
+                    </div>
+                    {yearlyType === "line" && (
+                        <Line data={yearlyData} options={chartOptions} />
+                    )}
+                    {yearlyType === "bar" && (
+                        <Bar data={yearlyData} options={chartOptions} />
+                    )}
+                    {yearlyType === "pie" && (
+                        <Pie data={yearlyData} options={chartOptions} />
+                    )}
                 </div>
             </div>
         </div>

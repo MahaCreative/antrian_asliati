@@ -73,7 +73,7 @@ class AuthController extends Controller
             "nama" => $request->name,
             "jenis_kelamin" => $request->jenis_kelamin,
             "tanggal_lahir" => $request->tanggal_lahir,
-
+            'avatar' => $avatar,
             "alamat" => $request->alamat,
             "phone_number" => $request->phone_number,
             'status' => 'pribadi'
@@ -94,9 +94,9 @@ class AuthController extends Controller
     public function profile(Request $request)
     {
         if ($request->user()->role == 'pasien') {
-            $user = User::with('pasien')->find($request->user()->id);
-
-            return inertia('Guset/Profile/Index', compact('user'));
+            $user = User::find($request->user()->id);
+            $pasien = Pasien::where('user_id', $user->id)->where('status', 'pribadi')->first();
+            return inertia('Guset/Profile/Index', compact('user', 'pasien'));
         }
     }
 

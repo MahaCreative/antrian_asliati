@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class RekamMedis extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+
+    public function dokter()
+    {
+        return $this->belongsTo(Dokter::class);
+    }
+
+    protected $casts = [
+        'obat' => 'array',
+        'hasil_penunjang' => 'array',
+    ];
 }
