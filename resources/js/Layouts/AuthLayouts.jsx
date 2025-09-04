@@ -14,7 +14,9 @@ import {
     LocalHospital,
     LockClock,
     MedicalInformation,
+    Monitor,
     Print,
+    Queue,
     Settings,
     Timelapse,
     Timeline,
@@ -33,8 +35,8 @@ export default function AuthLayouts({ title, children }) {
             <Head title={title} />
             <div
                 className={`${
-                    openSidebar ? "w-[350px]" : "w-0"
-                } useTransition  bg-gradient-to-br from-blue-500 via-blue-800 to-blue-900 min-h-screen  relative`}
+                    openSidebar ? "w-[500px]" : "w-0"
+                }  useTransition  bg-gradient-to-br from-blue-500 via-blue-800 to-blue-900 min-h-screen  fixed z-50`}
             >
                 <div className={`${openSidebar ? "" : "hidden"}`}>
                     <div className="py-2 flex items-center gap-x-1 border-b border-white/50">
@@ -122,6 +124,52 @@ export default function AuthLayouts({ title, children }) {
                                     active={"admin.kelolad-jadwal-dokter"}
                                     name={"Jadwal Dokter"}
                                 />
+                                
+                            </DropdownLink>
+                            <DropdownLink
+                                logo={
+                                    <Queue
+                                        color="inherit"
+                                        fontSize="inherit"
+                                    />
+                                }
+                                name={"Antrian Offline"}
+                            >
+                                <DropdownLink.Item
+                                    links={route("admin.kelola-dokter")}
+                                    logo={
+                                        <MedicalInformation
+                                            color="inherit"
+                                            fontSize="inherit"
+                                        />
+                                    }
+                                    active={"admin.kelola-dokter"}
+                                    name={"Display Antrian Loket"}
+                                />
+                                
+                                <DropdownLink.Item
+                                    links={route("admin.kelolad-jadwal-dokter")}
+                                    logo={
+                                        <Monitor
+                                            color="inherit"
+                                            fontSize="inherit"
+                                        />
+                                    }
+                                    active={"admin.kelolad-jadwal-dokter"}
+                                    name={"Display Antrian Klinik"}
+                                />
+                                <DropdownLink.Item
+                                    links={route("take-antrian")}
+                                    logo={
+                                        <Monitor
+                                            color="inherit"
+                                            fontSize="inherit"
+                                        />
+                                    }
+                                    active={"admin.kelolad-jadwal-dokter"}
+                                    name={"Plasma Ambil Antrian"}
+                                />
+                                
                             </DropdownLink>
                         </>
                     )}
@@ -172,13 +220,13 @@ export default function AuthLayouts({ title, children }) {
                         Laporan
                     </p>
                     <MenuLink
-                        links={route("admin.report.antrian-poli.index")}
+                        // links={route("admin.report.antrian-poli.index")}
                         logo={<Print color="inherit" fontSize="inherit" />}
                         active={"admin.report.antrian-poli.index"}
                         name={"Laporan Antrian Poli"}
                     />
                     <MenuLink
-                        links={route("admin.report.rekam-medis.index")}
+                        // links={route("admin.report.rekam-medis.index")}
                         logo={<Print color="inherit" fontSize="inherit" />}
                         active={"admin.report.rekam-medis.index"}
                         name={"Laporan Rekam Medis"}

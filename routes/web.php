@@ -17,6 +17,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\RekamMedisController;
+use App\Http\Controllers\AntrianLoketController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,7 +41,11 @@ Route::middleware(['guest'])->group(function () {
     Route::post('register', [AuthController::class, 'store_register'])->name('register');
 });
 
+// Make this route public (no auth middleware) so Ziggy can include it for QueueTakePage
+
+
 Route::middleware(['auth'])->group(function () {
+//    route pasien
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('profile', [AuthController::class, 'profile'])->name('profile');
     Route::post('profile', [AuthController::class, 'profile_update'])->name('profile');
@@ -53,60 +58,44 @@ Route::middleware(['auth'])->group(function () {
     Route::post('post-data-keluarga', [KeluargaController::class, 'store'])->name('store-data-keluarga');
     Route::post('update-data-keluarga', [KeluargaController::class, 'update'])->name('update-data-keluarga');
     Route::delete('delete-data-keluarga', [KeluargaController::class, 'delete'])->name('delete-data-keluarga');
-});
+// end route pasien
 
-Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // antrian offline
+    Route::get('admin/take-antrian', [AntrianOfflineController::class, 'index'])->name('take-antrian');
+    Route::post('admin/store-take-antrian', [AntrianOfflineController::class, 'store'])->name('store-take-antrian');
+    Route::get('admin/print-struk-antrian/{id}', [AntrianOfflineController::class, 'print_struk'])->name('print-struk-antrian');
 
-// Admin
-Route::get('admin/kelola-profile-klinik', [ProfileKlinikController::class, 'index'])->name('admin.profile-klinik');
-Route::post('admin/update-profile-klinik', [ProfileKlinikController::class, 'store'])->name('admin.update-profile-klinik');
+    Route::get('admin/display-antrian-loket', [AntrianLoketController::class, 'loket'])->name('display-antrian-loket');
+    Route::get('admin/display-antrian-poli', [AntrianLoketController::class, 'poli'])->name('display-antrian-poli');
 
-Route::get('admin/kelola-poli-klinik', [PoliController::class, 'index'])->name('admin.kelola-poli');
-Route::post('admin/store-poli-klinik', [PoliController::class, 'store'])->name('admin.store-poli');
-Route::post('admin/update-poli-klinik', [PoliController::class, 'update'])->name('admin.update-poli');
-Route::post('admin/delete-poli-klinik/{id}', [PoliController::class, 'delete'])->name('admin.delete-poli');
+    // Other existing routes...
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('admin/kelola-dokter', [DokterController::class, 'index'])->name('admin.kelola-dokter');
-Route::post('admin/store-dokter', [DokterController::class, 'store'])->name('admin.store-dokter');
-Route::post('admin/update-dokter', [DokterController::class, 'update'])->name('admin.update-dokter');
-Route::post('admin/delete-dokter/{id}', [DokterController::class, 'delete'])->name('admin.delete-dokter');
+    Route::get('admin/kelola-profile-klinik', [ProfileKlinikController::class, 'index'])->name('admin.profile-klinik');
+    Route::post('admin/update-profile-klinik', [ProfileKlinikController::class, 'store'])->name('admin.update-profile-klinik');
 
-Route::get('admin/kelolad-jadwal-dokter', [JadwalDokterController::class, 'index'])->name('admin.kelolad-jadwal-dokter');
-Route::post('admin/store-jadwal-dokter', [JadwalDokterController::class, 'store'])->name('admin.store-jadwal-dokter');
-Route::post('admin/update-jadwal-dokter', [JadwalDokterController::class, 'update'])->name('admin.update-jadwal-dokter');
-Route::post('admin/delete-jadwal-dokter/{id}', [JadwalDokterController::class, 'delete'])->name('admin.delete-jadwal-dokter');
+    Route::get('admin/kelola-poli-klinik', [PoliController::class, 'index'])->name('admin.kelola-poli');
+    Route::post('admin/store-poli-klinik', [PoliController::class, 'store'])->name('admin.store-poli');
+    Route::post('admin/update-poli-klinik', [PoliController::class, 'update'])->name('admin.update-poli');
+    Route::post('admin/delete-poli-klinik/{id}', [PoliController::class, 'delete'])->name('admin.delete-poli');
 
-Route::get('admin/kelola-petugas', [PetugasController::class, 'index'])->name('admin.kelola-petugas');
-Route::post('admin/store-kelola-petugas', [PetugasController::class, 'store'])->name('admin.store-petugas');
-Route::post('admin/update-kelola-petugas', [PetugasController::class, 'update'])->name('admin.update-petugas');
-Route::post('admin/delete-kelola-petugas/{id}', [PetugasController::class, 'delete'])->name('admin.delete-petugas');
+    Route::get('admin/kelola-dokter', [DokterController::class, 'index'])->name('admin.kelola-dokter');
+    Route::post('admin/store-dokter', [DokterController::class, 'store'])->name('admin.store-dokter');
+    Route::post('admin/update-dokter', [DokterController::class, 'update'])->name('admin.update-dokter');
+    Route::post('admin/delete-dokter/{id}', [DokterController::class, 'delete'])->name('admin.delete-dokter');
 
+    Route::get('admin/kelola-jadwal-dokter', [JadwalDokterController::class, 'index'])->name('admin.kelolad-jadwal-dokter');
+    Route::post('admin/store-jadwal-dokter', [JadwalDokterController::class, 'store'])->name('admin.store-jadwal-dokter');
+    Route::post('admin/update-jadwal-dokter', [JadwalDokterController::class, 'update'])->name('admin.update-jadwal-dokter');
+    Route::post('admin/delete-jadwal-dokter/{id}', [JadwalDokterController::class, 'delete'])->name('admin.delete-jadwal-dokter');
 
+    Route::get('admin/kelola-petugas', [PetugasController::class, 'index'])->name('admin.kelola-petugas');
+    Route::post('admin/store-kelola-petugas', [PetugasController::class, 'store'])->name('admin.store-petugas');
+    Route::post('admin/update-kelola-petugas', [PetugasController::class, 'update'])->name('admin.update-petugas');
+    Route::post('admin/delete-kelola-petugas/{id}', [PetugasController::class, 'delete'])->name('admin.delete-petugas');
 
-Route::get('admin/kelola-antrian-poli', [AntrianPoliController::class, 'index'])->name('admin.antrian-poli');
-Route::post('admin/panggil-antrian-poli', [AntrianPoliController::class, 'update'])->name('admin.panggil-antrian-poli');
+    Route::get('admin/kelola-antrian-poli', [AntrianPoliController::class, 'index'])->name('admin.antrian-poli');
+    Route::post('admin/panggil-antrian-poli', [AntrianPoliController::class, 'update'])->name('admin.panggil-antrian-poli');
 
-Route::get('admin/data-pasien', [PasienController::class, 'index'])->name('admin.kelola-pasien');
-
-
-
-// dokter
-Route::middleware(['auth',])->group(function () {
-    Route::get('/proses-antrian/{pasien}/{id_antrian}', [RekamMedisController::class, 'index'])->name('proses-antrian.index');
-    Route::post('/store-proses-antrian/{pasien}', [RekamMedisController::class, 'store'])->name('proses-antrian.store');
-    Route::put('/rekam-medis/{rekamMedis}', [RekamMedisController::class, 'update'])->name('rekam-medis.update');
-    Route::delete('/rekam-medis/{rekamMedis}', [RekamMedisController::class, 'destroy'])->name('rekam-medis.destroy');
-
-    // Report routes
-    Route::get('/admin/report/antrian-poli', [\App\Http\Controllers\AntrianPoliReportController::class, 'index'])->name('admin.report.antrian-poli.index');
-    Route::post('/admin/report/antrian-poli/generate', [\App\Http\Controllers\AntrianPoliReportController::class, 'generate'])->name('admin.report.antrian-poli.generate');
-    Route::get('/admin/report/antrian-poli/print', [\App\Http\Controllers\AntrianPoliReportController::class, 'print'])->name('admin.report.antrian-poli.print');
-
-    Route::get('/admin/report/rekam-medis', [\App\Http\Controllers\RekamMedisReportController::class, 'index'])->name('admin.report.rekam-medis.index');
-    Route::post('/admin/report/rekam-medis/generate', [\App\Http\Controllers\RekamMedisReportController::class, 'generate'])->name('admin.report.rekam-medis.generate');
-    Route::get('/admin/report/rekam-medis/get-doctors', [\App\Http\Controllers\RekamMedisReportController::class, 'getDoctors'])->name('admin.report.rekam-medis.getDoctors');
-    Route::get('/admin/report/rekam-medis/print', [\App\Http\Controllers\RekamMedisReportController::class, 'print'])->name('admin.report.rekam-medis.print');
-
-    Route::get('/admin/report/antrian-poli/get-polis', [\App\Http\Controllers\AntrianPoliReportController::class, 'getPolis'])->name('admin.report.antrian-poli.getPolis');
-    Route::get('/admin/report/antrian-poli/get-dokters-by-poli', [\App\Http\Controllers\AntrianPoliReportController::class, 'getDoktersByPoli'])->name('admin.report.antrian-poli.getDoktersByPoli');
+    Route::get('admin/data-pasien', [PasienController::class, 'index'])->name('admin.kelola-pasien');
 });
